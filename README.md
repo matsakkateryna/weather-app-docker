@@ -1,22 +1,29 @@
-# Aplikacja Pogodowa
+# Weather App – React + Docker + AWS
 
-Aplikacja do wyświetlania prognozy pogody stworzona w React z wykorzystaniem TypeScript.
+Aplikacja pogodowa stworzona w **React + TypeScript**, z wykorzystaniem **Docker**, **GitHub Actions (CI)** oraz wdrożona na **AWS S3 (Static Website Hosting)**.
+Demo aplikacji (AWS S3):
+http://weather-app-008457818211.s3-website-us-east-1.amazonaws.com/
+
 
 ## Wymagania
 
 - Node.js (wersja 18 lub nowsza)
 - npm
 
-## Instalacja
 
-1. Sklonuj lub pobierz repozytorium
-2. Zainstaluj zależności:
+## Uruchomienie lokalne bez Dockera
+
+### 1. Klonowanie repozytorium
+
+```bash
+git clone https://github.com/matsakkateryna/weather-app-docker.git
+cd weather-app
+```
+## Instalacja zależności
 
 ```bash
 npm install
 ```
-
-## Uruchomienie
 
 ### Tryb deweloperski
 
@@ -26,19 +33,36 @@ npm run dev
 
 Aplikacja będzie dostępna pod adresem: http://localhost:5173
 
-### Budowanie wersji produkcyjnej
+## Uruchomienie aplikacji w Dockerze
+
+### Budowanie obrazu Dockera
 
 ```bash
-npm run build
+docker build -t weather-app .
 ```
-
-Zbudowane pliki znajdą się w katalogu `dist/`.
-
-### Podgląd wersji produkcyjnej
+### Uruchomienie kontenera
 
 ```bash
-npm run preview
+docker run -p 8080:80 weather-app
 ```
+
+Aplikacja będzie dostępna pod adresem: http://localhost:8080
+
+## CI – GitHub Actions
+
+Projekt zawiera workflow GitHub Actions, który:
+	•	uruchamia się przy każdym push na branch main
+	•	buduje obraz Dockera
+	•	sprawdza poprawność aplikacji
+
+## Deployment na AWS S3
+
+Aplikacja została:
+	1.	Zbudowana lokalnie (npm run build)
+	2.	Wgrana do Amazon S3
+	3.	Udostępniona jako Static Website Hosting
+
+  Publiczny adres aplikacji: http://weather-app-008457818211.s3-website-us-east-1.amazonaws.com/
 
 ## Konfiguracja API pogodowego
 
@@ -78,28 +102,20 @@ const API_KEY = 'twój_klucz_api';
 - React 19
 - TypeScript
 - Vite
-- React Router
-- Redux Toolkit
-- Axios
+- Docker
+- GitHub Actions (CI)
+- AWS S3 (Static Website Hosting)
+- OpenWeatherMap API
 
-## Struktura projektu
+## Struktura projektu (skrót)
 
 ```
-src/
-├── api/           # Serwis API pogodowego
-├── components/    # Komponenty wielokrotnego użytku
-├── pages/         # Strony aplikacji
-├── store/         # Konfiguracja Redux
-├── types/         # Definicje typów TypeScript
-├── App.tsx        # Główny komponent z routingiem
-├── App.css        # Style aplikacji
-└── main.tsx       # Punkt wejścia
+weather-app/
+├── public/
+├── src/
+├── .github/workflows/
+├── Dockerfile
+├── README.md
+└── package.json
 ```
 
-## Użyte hooki React
-
-- `useState` - zarządzanie stanem lokalnym
-- `useEffect` - pobieranie danych
-- `useCallback` - optymalizacja funkcji
-- `useMemo` - optymalizacja obliczeń
-- `useSelector` / `useDispatch` - integracja z Redux
